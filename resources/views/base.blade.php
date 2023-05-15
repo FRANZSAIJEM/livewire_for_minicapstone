@@ -9,28 +9,50 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@100;300&family=Press+Start+2P&family=Raleway:wght@200&family=Secular+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap" rel="stylesheet">
     <title>Document</title>
+
     @livewireStyles()
 </head>
 <body>
-    @include('navbar.base')
+    <div class="header">
+        @include('navbar.base')
+    </div>
 
 
+    <div class="body">
         @yield('content')
+    </div>
 
 
     @livewireScripts()
 </body>
 <style>
-    body{
-        /* background-image: url('1679216328.jpg'); */
-        background-repeat: no-repeat;
-        background-size: cover;
 
-        background-color: rgb(53, 53, 53);
+    header {
+        background-color: rgba(0, 0, 0, 0.552) !important;
         font-family: 'Poppins', sans-serif;
         color: white;
+    }
 
+    .body::before {
+    content: "";
+    background-image: url('/illenium.jpg');
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: fixed;
+    z-index: -1;
+    filter: blur(25px);
+    }
+    body {
+        background-color: rgb(0, 0, 0) !important;
+        font-family: 'Poppins', sans-serif;
+        color: white;
     }
 </style>
 </html>

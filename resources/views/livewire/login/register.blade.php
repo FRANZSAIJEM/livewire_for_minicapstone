@@ -1,4 +1,4 @@
-<div style="display: grid; place-content: center; margin-top: -25px">
+<div style="display: grid; place-content: center;" class="mt-5">
     <div class="card text-dark" style="width: 500px">
         <div class="card-header">
             <h2>Register</h2>
@@ -6,14 +6,16 @@
         <form wire:submit.prevent='register'>
             <div class="card-body">
 
-                <div class="image-upload position-relative shadow">
+                {{-- <div class="image-upload position-relative shadow">
                     <input type="file" class="form-control position-absolute top-0 start-0 opacity-0" wire:model="image" id="image" name="image">
                     <label for="image" class="upload-label d-flex align-items-center justify-content-center">
                       <img src="{{ $image ? $image->temporaryUrl() : '/placeholder.png' }}" alt="Profile Image" class="preview-image rounded-circle bg-dark">
                       <span class="upload-icon"><i class="fa fa-camera"></i></span>
                     </label>
 
-                  </div> <br>
+                  </div> --}}
+
+                  <br>
                   @error('image')
                     <span class="text-danger text-lg">{{$message}}</span>
                     @enderror
@@ -24,12 +26,29 @@
                     <label for="name" style="transform: translateY(27px); margin-left: 81px;"><b>Name</b></label>
                     <div class="d-flex">
 
-                        <label for="name" class="p-3 bg-primary text-center rounded" style="width: 75px"> <i class="fa fa-user"></i> </label>
+                        <label for="name" class="p-3 bg-info text-center rounded" style="width: 75px"> <i class="fa-solid fa-file-signature"></i> </label>
                         <input type="text" name="" id="name" class="form-control pt-4" wire:model='name'>
 
                     </div>
 
                     @error('name')
+                    <span class="text-danger text-lg">{{$message}}</span>
+                    @enderror
+
+                </div>
+
+                <div class="mb-1">
+
+
+                    <label for="username" style="transform: translateY(27px); margin-left: 81px;"><b>User Name</b></label>
+                    <div class="d-flex">
+
+                        <label for="username" class="p-3 bg-primary text-center rounded" style="width: 75px"> <i class="fa fa-user"></i> </label>
+                        <input type="text" name="" id="username" class="form-control pt-4" wire:model='username'>
+
+                    </div>
+
+                    @error('username')
                     <span class="text-danger text-lg">{{$message}}</span>
                     @enderror
 
@@ -51,6 +70,28 @@
                     @enderror
 
                 </div>
+
+
+                {{-- <div class="mb-1">
+
+                    <label for="Location" style="transform: translateY(27px); margin-left: 81px;"><b>Location</b></label>
+                    <div class="d-flex">
+
+                        <label for="Location" class="p-3 bg-success text-center rounded" style="width: 75px"> <i class="fa-solid fa-location-dot"></i></label>
+                        <input type="Location" name="" id="Location" class="form-control pt-4" wire:model='location'>
+
+                    </div>
+
+                    @error('Location')
+                    <span class="text-danger text-lg">{{$message}}</span>
+                    @enderror
+
+                </div> --}}
+
+
+
+
+
 
                 <div class="mb-1">
 
@@ -80,7 +121,7 @@
                     @enderror
                 </div>
                 @endif
-
+{{--
                 <div class="mb-1 mt-4">
 
 
@@ -94,7 +135,7 @@
                     <span class="text-danger text-lg">{{$message}}</span>
                     @enderror
 
-                </div>
+                </div> --}}
 
 
                 <div class="mb-3 mt-3 d-flex w-100">

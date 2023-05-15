@@ -4,6 +4,8 @@ namespace App\Http\Livewire\MusicBand;
 
 use Livewire\Component;
 use App\Models\Musicband;
+use App\Models\Booking;
+
 use Carbon\Carbon;
 
 use Livewire\WithFileUploads;
@@ -17,7 +19,7 @@ class Musicbands extends Component
 
     use WithFileUploads;
 
-    public $image, $selectedMusicBarId, $name, $location, $rate, $musicbar_edit_id, $musicbar_delete_id;
+    public $image, $selectedMusicBarId, $name, $location, $rate, $musicbar_edit_id, $musicbar_delete_id, $selectedMusicBandId;
     public $genre = '';
 
     public function addBar()
@@ -29,7 +31,6 @@ class Musicbands extends Component
             'location' => 'required',
             'rate' => 'required',
             'genre' => 'required',
-
         ]);
 
         $musicbar = new Musicband();
@@ -68,9 +69,37 @@ class Musicbands extends Component
         $musicbar = Musicband::find($id);
         $this->musicbar = $musicbar;
 
+        $booking = Booking::where('musicband_id', $this->selectedMusicBarId)->first();
+
+        if ($booking) {
+            $feedback = $booking->feedback;
+            $rating = $booking->rating;
+        }
+
         $image_url = asset('uploads/image_uploads/' . $musicbar->image);
         $script = "$('#modal-image').attr('src', '{$image_url}');";
         $this->dispatchBrowserEvent('update-image', ['script' => $script]);
+
+
+    }
+
+
+    public function selectedMusicBarId($id)
+    {
+        $this->selectedMusicBarId = $id;
+        $this->bookNow();
+    }
+
+    public function bookNow()
+    {
+        if (!$this->selectedMusicBarId) {
+            return;
+        }
+
+        return redirect()->route('music-band.booking', [
+            'id' => $this->selectedMusicBarId,
+            'musicband' => $this->musicbar,
+        ]);
     }
 
 
@@ -88,8 +117,6 @@ class Musicbands extends Component
         $this->location = $musicbar->location;
         $this->rate = $musicbar->rate;
         $this->genre = $musicbar->genre;
-
-
 
     }
 
@@ -149,15 +176,16 @@ class Musicbands extends Component
     public function mount()
     {
         $this->locations = Musicband::pluck('location')->unique()->toArray();
+
     }
 
     public function index()
     {
-
-        $query = Musicband::orderby('id')->search($this->bandSearch);
-        return view('components.musicband');
-
+        $musicbands = Musicband::orderBy('id')->search($this->bandSearch)->get();
+        return view('components.musicband', ['musicbands' => $musicbands]);
     }
+
+
 
     public $bandSearch;
     public $genRock, $genPop, $genReggae, $genAcoustic, $genClassical;
@@ -167,6 +195,9 @@ class Musicbands extends Component
 
     public function render()
     {
+
+
+
         $query = Musicband::search($this->bandSearch);
 
         if ($this->sortRate <= 100) {

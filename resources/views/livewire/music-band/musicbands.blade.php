@@ -322,33 +322,121 @@
   </div>
 
 
-  <div wire:ignore.self class="modal mt-5 fade text-black" id="view" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
+  <div wire:ignore.self class="modal mt-5 fade text-white" id="view" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+    <div class="modal-dialog" style="max-width: 1000px;">
+      <div class="modal-content"  style="background-color: rgba(25, 25, 25, 0.645); -webkit-backdrop-filter: blur(15px); backdrop-filter: blur(15px);">
         <div class="modal-body p-5">
-            <div class="imageView text-center">
-                @foreach ($musicbands as $musicbar)
-                    @if ($musicbar->id === $selectedMusicBarId)
-                        <img src="{{ asset('uploads/image_uploads/' . $musicbar->image) }}" width="250" class="rounded imageViewCss" alt="">
-                    @endif
-                @endforeach
+
+          <div class="imageView text-center">
+
+            @foreach ($musicbands as $musicbar)
+              @if ($musicbar->id === $selectedMusicBarId)
+                <div style="display: flex; align-items: center; justify-content: center;">
+                  <div class="rounded-circle" style="background-image: url('{{ asset('uploads/image_uploads/' . $musicbar->image) }}'); background-size: cover; background-repeat: no-repeat; width: 250px; height: 250px; background-position: center center;"></div>
+                </div>
+
+                <h3 class="text-white mt-3">{{$musicbar->name}}</h3>
+
+                <div class="d-flex justify-content-between text-white rounded shadow mb-3" style="background-color: rgba(19, 19, 19, 0.887)">
+                  @if ($musicbar->id === $selectedMusicBarId)
+                    <h6 class="text-white mt-3 p-3">₱ Talent Fee: {{$musicbar->rate}}</h6>
+                    <h6 class="text-white mt-3 p-3">💸 Total Transactions: {{$musicbar->bookings->count()}}</h6>
+                  @endif
+                </div>
+              @endif
+            @endforeach
+
             <h4>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nemo adipisci amet perferendis eos? Molestias adipisci maxime saepe enim officia sapiente molestiae dolore, necessitatibus aperiam excepturi veritatis doloribus, fugiat voluptate inventore.</h4>
-            <button class="btn btn-primary">Book Now</button>
-            </div>
+
+            @if ($musicbands->count() > 0)
+            @foreach ($musicbands as $musicband)
+                @if ($musicband->id === $selectedMusicBarId)
+                    <div>
+                        <a class="btn btn-outline-light border-1 border-secondary p-3 mt-2" href="{{ route('music-band.booking', ['id' => $musicband->id, 'musicband' => $musicband->name]) }}"> <i class="fa-solid fa-book"></i> Book now</a>
+                    </div>
+                    <hr>
+                    @if ($musicband->bookings->count() > 0)
+                        <h4 class="float-start">Gig History</h4><br><br>
+                        @foreach($musicband->bookings as $booking)
+                            @if($booking->status !== 'Canceled')
+                            <div class="card mb-5" style="background-color: rgba(19, 19, 19, 0.887)">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            @if($booking->user->image)
+                                                <img class="mb-3" src="{{ asset('uploads/image_uploads/' . ($booking->user->image ? $booking->user->image : 'default_images/blank-profile.jpg')) }}" alt="User Image" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+                                            @endif
+                                        </div>
+                                        <h4 class="mt-2 ms-4"><b>{{ $booking->eventname }}</b></h4>
+                                        <h6 class="mt-2">{{ $booking->eventdate }}</h6>
+                                    </div>
+                                    <div class="mt-2">
+                                        @forelse($booking->user->feedbacks->where('booking_id', $booking->id) as $feedback)
+                                            <h6 style="background-color: rgb(52, 52, 52)" class="form-control border-0 text-white p-2 mb-2">
+                                                <b>Feed back: {{ $feedback->feedback }}</b>
+                                            </h6>
+                                        @empty
+                                            <p>No feedbacks found.</p>
+                                        @endforelse
+
+                                        @forelse($booking->user->feedbacks->where('booking_id', $booking->id) as $rating)
+                                            @php
+                                                $total_stars = '';
+                                                for ($i = 1; $i <= $rating->rating; $i++) {
+                                                    $total_stars .= '<i class="fa-solid fa-star text-warning"></i>';
+                                                }
+                                                for ($i = $rating->rating + 1; $i <= 5; $i++) {
+                                                    $total_stars .= '<i class="far fa-star"></i>';
+                                                }
+                                            @endphp
+                                            <h6 style="background-color: rgb(52, 52, 52)" class="form-control border-0 text-white p-2 mb-2">
+                                                <b>Rating: {!! $total_stars !!}</b>
+                                            </h6>
+                                        @empty
+                                            <p>No ratings found.</p>
+                                        @endforelse
 
 
-            <br> <br> <br>
-            <div class="buttonView float-end">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <h6 style="background-color: rgb(52, 52, 52)" class="form-control border-0 text-white p-2 mb-2"><b>Rated By: {{ $booking->user->username }}</b></h6>
+                                    </div>
+                                </div>
+                            </div>
 
-            </div>
+                            @endif
+                        @endforeach
+                    @endif
+                @endif
+            @endforeach
+        @else
+            <p>No musicbands found.</p>
+        @endif
 
+
+
+
+
+
+
+
+
+
+
+
+          </div>
+
+          <br> <br> <br>
+
+          <div class="buttonView float-end">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
 
         </div>
-
       </div>
     </div>
+
   </div>
+
   <style>
     .imageViewCss{
         cursor: pointer;

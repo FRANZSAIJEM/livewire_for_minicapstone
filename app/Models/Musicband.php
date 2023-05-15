@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Musicband extends Model
 {
     use HasFactory;
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 
     protected $table = 'musicbands';
 

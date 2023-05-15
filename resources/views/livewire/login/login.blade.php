@@ -1,4 +1,4 @@
-<div style="display: grid; place-content: center; margin-top: 150px"">
+<div style="display: grid; place-content: center; margin-top: 150px">
     <div class="card text-dark" style="width: 500px">
         @if (session()->has('message'))
             <div class="alert alert-success">

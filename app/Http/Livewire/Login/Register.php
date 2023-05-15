@@ -12,28 +12,32 @@ class Register extends Component
 {
     use WithFileUploads;
 
-    public $image, $name, $email, $description, $password, $password_confirmation;
+    public $username, $image, $name, $location, $email, $description, $password, $password_confirmation;
 
     public function register()
     {
         $this->validate([
-            'image' => 'required',
+            // 'image' => 'required',
             'name' => 'required|string',
+            'username' => 'required|string',
+            // 'location' => 'required|string',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed|string|min:8',
-            'description' => 'required|string',
+            // 'description' => 'required|string',
         ]);
 
         $user = new User();
 
-        $imageName = Carbon::now()->timestamp . '.' . $this->image->extension();
-        $this->image->storeAs('image_uploads', $imageName);
+        // $imageName = Carbon::now()->timestamp . '.' . $this->image->extension();
+        // $this->image->storeAs('image_uploads', $imageName);
 
-        $user->image = $imageName;
+        // $user->image = $imageName;
         $user->name = $this->name;
+        $user->username = $this->username;
+        // $user->location = $this->location;
         $user->email = $this->email;
         $user->password = bcrypt($this->password);
-        $user->description = $this->description;
+        // $user->description = $this->description;
         $user->save();
 
         return redirect('/login')->with('message', 'Your account has been created successfully!');
